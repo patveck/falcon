@@ -3,9 +3,77 @@ name: Responsive Props
 route: /props
 order: 1
 ---
-
+import { Playground } from 'docz';
+import { Box, GridLayout, Divider } from '../';
 import { ResponsivePropsTable } from '../../docs';
+
 
 # Responsive Props
 
-<ResponsivePropsTable />
+## Introduction
+
+Each `falcon-ui` component accepts, responsive, theme-based style props defined below,
+which offer easy to use, flexible yet consistent styling customization per component basis.
+
+## Colors props
+The margin and padding props use a shorthand syntax, similar to other OOCSS approaches and many CSS libraries.
+TODO more description about values being defined in theme
+
+#### Available Props
+
+<ResponsivePropsTable themeProp="colors" />
+
+#### Example
+
+<Playground>
+    <Box my="lg">
+        Editable colors props playground!
+    </Box>
+
+    <GridLayout gridGap="lg" gridTemplateColumns="1fr 1fr">
+        <Box p="md" bg="primaryLight">Item1</Box>
+        <Box p="md" bg="primaryLight">Item2</Box>
+        <Box p="md" bg="primaryLight">Item3</Box>
+        <Box p="md" bg="primaryLight">Item4</Box>
+    </GridLayout>
+</Playground>
+
+<Divider mt="xl" border="regular" borderColor="primaryDark"/>
+
+## Spacing props
+
+The margin and padding props use a shorthand syntax, similar to other OOCSS approaches and many CSS libraries.
+TODO more description about values being defined in theme
+
+#### Available Props
+
+<ResponsivePropsTable themeProp="spacing" />
+
+#### Example
+
+<Playground>
+    <Box my="lg">
+        Editable spacing props playground!
+    </Box>
+
+    <GridLayout gridGap="lg" gridTemplateColumns="1fr 1fr">
+        <Box p="md" bg="primaryLight">Item1</Box>
+        <Box p="md" bg="primaryLight">Item2</Box>
+        <Box p="md" bg="primaryLight">Item3</Box>
+        <Box p="md" bg="primaryLight">Item4</Box>
+    </GridLayout>
+</Playground>
+
+<Divider mt="xl" border="regular" borderColor="primaryDark"/>
+
+
+
+## Font sizes
+
+#### Available Props
+
+<ResponsivePropsTable themeProp="fontSizes" />
+
+
+## CSS prop
+

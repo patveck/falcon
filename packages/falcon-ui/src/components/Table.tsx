@@ -6,8 +6,7 @@ export const Table = themed({
   defaultTheme: {
     table: {
       borderRadius: 'xs',
-      fontSize: 'sm',
-      boxShadow: 'sm',
+      fontSize: 'md',
       css: {
         display: {
           xs: 'block',

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 import {
   H4,
@@ -9,15 +9,9 @@ import {
   Summary,
   DetailsContent,
   ThemeProvider,
-  Sidebar,
   Box,
-  Portal,
   NumberInput,
   GridLayout,
-  themed,
-  Theme,
-  createTheme,
-  mergeThemes,
   Group,
   Button,
   Dropdown,
@@ -27,64 +21,25 @@ import {
   H2,
   Divider
 } from '@deity/falcon-ui';
-import { availablePresets } from './presets';
 
-const fonts = [
-  {
-    value: '"Segoe UI", system-ui, sans-serif'
-  },
-  {
-    value: '"SF Mono", monospace'
-  },
-  {
-    value: 'Work Sans',
-    google: 'Work Sans:300,400,700'
-  },
-  {
-    value: 'Eczar',
-    google: 'Eczar:300,400,700'
-  },
-  {
-    value: 'Fira Sans',
-    google: 'Fira Sans:300,400,700'
-  },
-  {
-    value: 'Rubik',
-    google: 'Rubik:300,400,700'
-  },
-  {
-    value: 'Libre Franklin',
-    google: 'Libre Franklin:300,400,700'
-  },
-  {
-    value: 'Space Mono',
-    google: 'Space Mono:300,400,700'
-  },
-  {
-    value: 'IBM Plex Sans',
-    google: 'IBM Plex Sans:300,400,700'
-  },
-  {
-    value: 'Bangers',
-    google: 'Bangers:300,400,700'
-  },
-  {
-    value: 'Bubblegum Sans',
-    google: 'Bubblegum Sans:300,400,700'
-  },
-  {
-    value: 'Monoton',
-    google: 'Monoton:300,400,700'
-  },
-  {
-    value: 'Baloo',
-    google: 'Baloo:300,400,700'
-  },
-  {
-    value: 'Lilita One',
-    google: 'Lilita One:300,400,700'
-  }
-];
+import * as Components from '@deity/falcon-ui';
+
+import { availablePresets } from './presets';
+import { fonts } from './fonts';
+import { ThemeSidebar } from './ThemeSidebar';
+
+const availableUIComponents = Object.keys(Components)
+  .filter(
+    componentName =>
+      (Components as any)[componentName].defaultProps &&
+      (Components as any)[componentName].defaultProps.defaultTheme !== undefined
+  )
+  .map(componentName => ({
+    name: componentName,
+    defaultTheme: (Components as any)[componentName].defaultProps.defaultTheme
+  }));
+
+export * from './ThemeState';
 
 const categories = {
   colors: {
@@ -186,64 +141,6 @@ const categories = {
     ]
   }
 };
-
-type ThemeSidebarProps = {
-  open: boolean;
-  toggle: any;
-  children?: ReactNode;
-};
-
-const SVGIcon = themed({
-  tag: 'svg'
-});
-
-const editorTheme = createTheme({
-  fonts: {
-    sans: '"SF Mono", monospace'
-  }
-});
-
-const ThemeSidebar = (props: ThemeSidebarProps) => (
-  <Sidebar
-    as={Portal}
-    visible={props.open}
-    side="right"
-    css={{ position: 'fixed', overflowX: 'inherit' }}
-    boxShadow="xs"
-    bg="primaryLight"
-  >
-    {props.children}
-    <Box
-      position="absolute"
-      right="100%"
-      top="calc(50% - 40px)"
-      height={90}
-      width={40}
-      display="flex"
-      bg={props.open ? 'primaryLight' : 'primaryDark'}
-      p="sm"
-      alignItems="center"
-      css={{
-        cursor: 'pointer',
-        borderTopLeftRadius: 8,
-        borderBottomLeftRadius: 8,
-        boxShadow: '-2px 5px 5px rgba(0,0,0,.1)'
-      }}
-      onClick={props.toggle}
-    >
-      <SVGIcon
-        viewBox="0 0 8 8"
-        height={20}
-        width={20}
-        css={({ theme }) => ({
-          fill: theme.colors.secondary
-        })}
-      >
-        <path d="M6 0l-1 1 2 2 1-1-2-2zm-2 2l-4 4v2h2l4-4-2-2z" id="pencil" />
-      </SVGIcon>
-    </Box>
-  </Sidebar>
-);
 
 export class ThemeEditor extends React.Component<any, any> {
   state = {
@@ -407,7 +304,7 @@ export class ThemeEditor extends React.Component<any, any> {
 
   render() {
     return (
-      <ThemeProvider withoutRoot theme={editorTheme}>
+      <ThemeProvider withoutRoot>
         <ThemeSidebar open={this.state.sidebarVisible} toggle={this.toggleSidebar}>
           <GridLayout
             p="sm"
@@ -442,68 +339,42 @@ export class ThemeEditor extends React.Component<any, any> {
                 <Details key={category.name} open={(this.state.openPanels as any)[categoryKey]}>
                   <Summary onClick={this.toggleCollapsible(categoryKey)}>{category.name}</Summary>
 
-                  <DetailsContent>
-                    {category.themeMappings.length === 1
-                      ? this.renderEditor(category.themeMappings[0])
-                      : category.themeMappings.map((themeMapping: any) => {
-                          const key = category.name + themeMapping.themeProps;
+                  {(this.state.openPanels as any)[categoryKey] && (
+                    <DetailsContent>
+                      {category.themeMappings.length === 1
+                        ? this.renderEditor(category.themeMappings[0])
+                        : category.themeMappings.map((themeMapping: any) => {
+                            const key = category.name + themeMapping.themeProps;
 
-                          return (
-                            <Details mb="sm" key={key} open={(this.state.openPanels as any)[key]}>
-                              <Summary onClick={this.toggleCollapsible(key)}>{themeMapping.themeProps}</Summary>
-                              <DetailsContent>{this.renderEditor(themeMapping)}</DetailsContent>
-                            </Details>
-                          );
-                        })}
-                  </DetailsContent>
+                            return (
+                              <Details mb="sm" key={key} open={(this.state.openPanels as any)[key]}>
+                                <Summary onClick={this.toggleCollapsible(key)}>{themeMapping.themeProps}</Summary>
+                                <DetailsContent>{this.renderEditor(themeMapping)}</DetailsContent>
+                              </Details>
+                            );
+                          })}
+                    </DetailsContent>
+                  )}
                 </Details>
               );
             })}
+            <Details key="components" open={(this.state.openPanels as any)['components']}>
+              <Summary onClick={this.toggleCollapsible('components')}>Components</Summary>
+
+              <DetailsContent>
+                {availableUIComponents.map(component => (
+                  <Details key={component.name} open={(this.state.openPanels as any)[`component${component.name}`]}>
+                    <Summary onClick={this.toggleCollapsible(`component${component.name}`)}>{component.name}</Summary>
+                    {(this.state.openPanels as any)[`component${component.name}`] && (
+                      <DetailsContent>{JSON.stringify(component.defaultTheme)}</DetailsContent>
+                    )}
+                  </Details>
+                ))}
+              </DetailsContent>
+            </Details>
           </GridLayout>
         </ThemeSidebar>
       </ThemeProvider>
     );
-  }
-}
-
-type ThemeStateState = {
-  activeTheme: Theme;
-};
-
-type ChildrenRenderProp = {
-  theme: Theme;
-  updateTheme: (themeDiff: Partial<Theme>, useInitial: any) => void;
-};
-
-type ThemeStateProps = {
-  initial?: Theme;
-  children: (renderProp: ChildrenRenderProp) => React.ReactNode;
-};
-
-export class ThemeState extends React.Component<ThemeStateProps, ThemeStateState> {
-  constructor(props: ThemeStateProps) {
-    super(props);
-    this.state = {
-      activeTheme: props.initial || createTheme()
-    };
-  }
-
-  updateTheme = (themeDiff: Partial<Theme>, { useInitial = false }: { useInitial?: boolean } = {}) => {
-    requestAnimationFrame(() => {
-      this.setState(state => {
-        const themeBase = useInitial ? this.props.initial || createTheme() : state.activeTheme;
-
-        return {
-          activeTheme: mergeThemes(themeBase, themeDiff)
-        };
-      });
-    });
-  };
-
-  render() {
-    return this.props.children({
-      theme: this.state.activeTheme,
-      updateTheme: this.updateTheme
-    });
   }
 }

@@ -200,7 +200,15 @@ export const mappings = propsMapping({
     themeProp: 'boxShadows'
   },
 
-  opacity: {}
+  opacity: {},
+
+  transitionTimingFunction: {
+    themeProp: 'easingFunctions'
+  },
+
+  transitionDuration: {
+    themeProp: 'transitionDurations'
+  }
 });
 
 export type PropsMappings = typeof mappings;

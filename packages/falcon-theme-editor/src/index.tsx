@@ -40,6 +40,7 @@ const availableUIComponents = Object.keys(Components)
   }));
 
 export * from './ThemeState';
+export * from './thememeta';
 
 const categories = {
   colors: {

@@ -1,10 +1,28 @@
+import { Theme, CSSObject } from '@deity/falcon-ui';
 import { fonts } from './fonts';
 
-const meta = {
+type ThemeMeta = {
+  [name in keyof Theme]?: {
+    unit?: string;
+    input: {
+      type: string;
+      min?: number;
+      step?: number;
+      max?: number;
+      options?: any[];
+    };
+    previewCss?: (value: string) => CSSObject;
+  }
+};
+
+export const Meta: ThemeMeta = {
   colors: {
     input: {
       type: 'color'
-    }
+    },
+    previewCss: value => ({
+      backgroundColor: value
+    })
   },
 
   spacing: {
@@ -104,34 +122,34 @@ const meta = {
   }
 };
 
-export const Categories = {
+export const ThemeCategories = {
   colors: {
     name: 'Colors',
-    mappings: [meta.colors]
+    mappings: [Meta.colors]
   },
 
   spacing: {
     name: 'Spacing',
-    mappings: [meta.spacing]
+    mappings: [Meta.spacing]
   },
 
   typography: {
     name: 'Typography',
-    mappings: [meta.fonts, meta.fontSizes, meta.fontWeights, meta.letterSpacings, meta.lineHeights]
+    mappings: [Meta.fonts, Meta.fontSizes, Meta.fontWeights, Meta.letterSpacings, Meta.lineHeights]
   },
 
   breakpoints: {
     name: 'Breakpoints',
-    mappings: [meta.breakpoints]
+    mappings: [Meta.breakpoints]
   },
 
   borders: {
     name: 'Borders',
-    mappings: [meta.borders, meta.borderRadius]
+    mappings: [Meta.borders, Meta.borderRadius]
   },
 
   misc: {
     name: 'Miscellaneous',
-    mappings: [meta.boxShadows, meta.easingFunctions, meta.transitionDurations]
+    mappings: [Meta.boxShadows, Meta.easingFunctions, Meta.transitionDurations]
   }
 };

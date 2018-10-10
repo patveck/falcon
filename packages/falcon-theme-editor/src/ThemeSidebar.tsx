@@ -18,7 +18,7 @@ export const ThemeSidebar = (props: ThemeSidebarProps) => (
     side="right"
     css={{ position: 'fixed', overflowX: 'inherit' }}
     boxShadow="xs"
-    bg="primaryLight"
+    bg="white"
   >
     {props.children}
     <Box

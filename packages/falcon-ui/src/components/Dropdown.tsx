@@ -60,7 +60,7 @@ const DropdownLabelInnerDOM: React.SFC<any> = ({ children, ...rest }) => (
   <DropdownContext.Consumer>
     {({ open }) => (
       <Box {...rest}>
-        <span>{children}</span>
+        <Box flex="1">{children}</Box>
         <Icon src={open ? 'dropdownArrowUp' : 'dropdownArrowDown'} fallback={open ? '▴' : '▾'} />
       </Box>
     )}

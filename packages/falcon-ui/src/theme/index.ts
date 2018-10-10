@@ -13,6 +13,8 @@ export * from './themed';
 
 export * from './utils';
 
+export * from './responsiveprops';
+
 // --- exported type definitions for theme  ----
 export interface Theme {
   colors: ThemeColors;

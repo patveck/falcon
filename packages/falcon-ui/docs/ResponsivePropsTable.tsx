@@ -4,6 +4,7 @@ import { withCSSContext } from '@emotion/core';
 import { mappings, ResponsivePropMapping } from '../src/theme/responsiveprops';
 import { Table, Thead, Tr, Th, Tbody, Td, Theme, Box, H3, H1 } from '../src';
 import { themeCategories, themeMeta } from '@deity/falcon-theme-editor';
+
 const mappingKeys = Object.keys(mappings);
 
 const toKebabCase = (val: string) => val.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();

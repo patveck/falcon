@@ -19,7 +19,10 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   H2,
-  Divider
+  Divider,
+  DefaultThemeProps,
+  H3,
+  createTheme
 } from '@deity/falcon-ui';
 
 import * as Components from '@deity/falcon-ui';
@@ -27,17 +30,7 @@ import * as Components from '@deity/falcon-ui';
 import { availablePresets } from './presets';
 import { fonts } from './fonts';
 import { ThemeSidebar } from './ThemeSidebar';
-
-const availableUIComponents = Object.keys(Components)
-  .filter(
-    componentName =>
-      (Components as any)[componentName].defaultProps &&
-      (Components as any)[componentName].defaultProps.defaultTheme !== undefined
-  )
-  .map(componentName => ({
-    name: componentName,
-    defaultTheme: (Components as any)[componentName].defaultProps.defaultTheme
-  }));
+import { ComponentEditor } from './ComponentEditor';
 
 export * from './ThemeState';
 export * from './thememeta';
@@ -52,6 +45,7 @@ const categories = {
       }
     ]
   },
+
   spacing: {
     name: 'Spacing',
     themeMappings: [
@@ -64,6 +58,7 @@ const categories = {
       }
     ]
   },
+
   fonts: {
     name: 'Typography',
     themeMappings: [
@@ -143,6 +138,26 @@ const categories = {
   }
 };
 
+const getThemableComponentsInfo = (components: object) =>
+  Object.keys(components)
+    .filter(
+      componentName =>
+        (Components as any)[componentName].defaultProps &&
+        (Components as any)[componentName].defaultProps.defaultTheme !== undefined
+    )
+    .map(componentName => ({
+      name: componentName,
+      defaultTheme: (Components as any)[componentName].defaultProps.defaultTheme as DefaultThemeProps
+    }));
+
+const editorTheme = createTheme({
+  components: {
+    summary: {
+      bg: 'primaryLight'
+    }
+  }
+});
+
 export class ThemeEditor extends React.Component<any, any> {
   state = {
     openPanels: {},
@@ -195,6 +210,17 @@ export class ThemeEditor extends React.Component<any, any> {
     }
   };
 
+  onComponentThemeChange = (themeKey: string) => (key: string, value: string) => {
+    console.log('aaa');
+    this.props.updateTheme({
+      components: {
+        [themeKey]: {
+          [key]: value
+        }
+      }
+    });
+  };
+
   loadGoogleFont(font: string) {
     // require is inline as webfontloader does not work server side
     // https://github.com/typekit/webfontloader/issues/383
@@ -226,6 +252,7 @@ export class ThemeEditor extends React.Component<any, any> {
 
   renderEditor(themeMapping: any) {
     const { theme } = this.props;
+
     return (
       <React.Fragment>
         {Object.keys(theme[themeMapping.themeProps]).map(themeProp => (
@@ -237,6 +264,7 @@ export class ThemeEditor extends React.Component<any, any> {
             key={themeMapping.themeProps + themeProp}
           >
             <H4 p="xs">{themeProp}</H4>
+
             {!themeMapping.step && (
               <Box gridColumn={!themeMapping.step ? 'span 3' : ''}>
                 {themeMapping.input === 'dropdown' && (
@@ -304,8 +332,10 @@ export class ThemeEditor extends React.Component<any, any> {
   }
 
   render() {
+    const components = getThemableComponentsInfo(this.props.components || {});
+
     return (
-      <ThemeProvider withoutRoot>
+      <ThemeProvider theme={editorTheme} withoutRoot>
         <ThemeSidebar open={this.state.sidebarVisible} toggle={this.toggleSidebar}>
           <GridLayout
             p="sm"
@@ -334,6 +364,7 @@ export class ThemeEditor extends React.Component<any, any> {
                 </Group>
               </DetailsContent>
             </Details>
+
             {Object.keys(categories).map(categoryKey => {
               const category = (categories as any)[categoryKey];
               return (
@@ -359,18 +390,39 @@ export class ThemeEditor extends React.Component<any, any> {
                 </Details>
               );
             })}
+
             <Details key="components" open={(this.state.openPanels as any)['components']}>
               <Summary onClick={this.toggleCollapsible('components')}>Components</Summary>
 
               <DetailsContent>
-                {availableUIComponents.map(component => (
-                  <Details key={component.name} open={(this.state.openPanels as any)[`component${component.name}`]}>
-                    <Summary onClick={this.toggleCollapsible(`component${component.name}`)}>{component.name}</Summary>
-                    {(this.state.openPanels as any)[`component${component.name}`] && (
-                      <DetailsContent>{JSON.stringify(component.defaultTheme)}</DetailsContent>
-                    )}
-                  </Details>
-                ))}
+                {components.map(component => {
+                  const themeKey = Object.keys(component.defaultTheme)[0];
+                  if (!themeKey) return null;
+
+                  return (
+                    <Details key={component.name} open={(this.state.openPanels as any)[`component${component.name}`]}>
+                      <Summary onClick={this.toggleCollapsible(`component${component.name}`)}>{component.name}</Summary>
+                      {(this.state.openPanels as any)[`component${component.name}`] && (
+                        <DetailsContent>
+                          <ComponentEditor
+                            defaultThemeProps={component.defaultTheme[themeKey]}
+                            themeProps={this.props.theme.components[themeKey]}
+                            theme={this.props.theme}
+                            onChange={this.onComponentThemeChange(themeKey)}
+                          />
+                          {component.defaultTheme[themeKey].variants && (
+                            <Box>
+                              <H3>Variants</H3>
+                              {/* {Object.keys(component.defaultTheme[themeKey].variants).map(variantKey => (
+                                <div>variant</div>
+                              ))} */}
+                            </Box>
+                          )}
+                        </DetailsContent>
+                      )}
+                    </Details>
+                  );
+                })}
               </DetailsContent>
             </Details>
           </GridLayout>

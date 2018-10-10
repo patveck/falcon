@@ -15,11 +15,12 @@ type ThemeMeta = {
   }
 };
 
-export const Meta: ThemeMeta = {
+export const themeMeta: ThemeMeta = {
   colors: {
     input: {
       type: 'color'
     },
+
     previewCss: value => ({
       backgroundColor: value
     })
@@ -32,7 +33,11 @@ export const Meta: ThemeMeta = {
       step: 1,
       max: 100
     },
-    unit: 'px'
+    unit: 'px',
+
+    previewCss: value => ({
+      width: value
+    })
   },
 
   fonts: {
@@ -49,6 +54,10 @@ export const Meta: ThemeMeta = {
       step: 1,
       max: 80
     },
+
+    previewCss: value => ({
+      fontSize: value
+    }),
 
     unit: 'px'
   },
@@ -73,7 +82,10 @@ export const Meta: ThemeMeta = {
   letterSpacings: {
     input: {
       type: 'text'
-    }
+    },
+    previewCss: value => ({
+      letterSpacing: value
+    })
   },
 
   breakpoints: {
@@ -90,7 +102,10 @@ export const Meta: ThemeMeta = {
   borders: {
     input: {
       type: 'text'
-    }
+    },
+    previewCss: value => ({
+      border: value
+    })
   },
 
   borderRadius: {
@@ -101,13 +116,20 @@ export const Meta: ThemeMeta = {
       max: 100
     },
 
-    unit: 'px'
+    unit: 'px',
+    previewCss: value => ({
+      borderRadius: value
+    })
   },
 
   boxShadows: {
     input: {
       type: 'text'
-    }
+    },
+
+    previewCss: value => ({
+      boxShadow: value
+    })
   },
   easingFunctions: {
     input: {
@@ -122,34 +144,40 @@ export const Meta: ThemeMeta = {
   }
 };
 
-export const ThemeCategories = {
+type ThemeCategories = {
+  [name: string]: {
+    name: string;
+    themeSections: (keyof Theme)[];
+  };
+};
+export const themeCategories: ThemeCategories = {
   colors: {
     name: 'Colors',
-    mappings: [Meta.colors]
+    themeSections: ['colors']
   },
 
   spacing: {
     name: 'Spacing',
-    mappings: [Meta.spacing]
+    themeSections: ['spacing']
   },
 
   typography: {
     name: 'Typography',
-    mappings: [Meta.fonts, Meta.fontSizes, Meta.fontWeights, Meta.letterSpacings, Meta.lineHeights]
+    themeSections: ['fonts', 'fontSizes', 'fontWeights', 'letterSpacings', 'lineHeights']
   },
 
   breakpoints: {
     name: 'Breakpoints',
-    mappings: [Meta.breakpoints]
+    themeSections: ['breakpoints']
   },
 
   borders: {
     name: 'Borders',
-    mappings: [Meta.borders, Meta.borderRadius]
+    themeSections: ['borders', 'borderRadius']
   },
 
   misc: {
     name: 'Miscellaneous',
-    mappings: [Meta.boxShadows, Meta.easingFunctions, Meta.transitionDurations]
+    themeSections: ['boxShadows', 'easingFunctions', 'transitionDurations']
   }
 };

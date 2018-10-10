@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon",
   "dependencies": {
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^10.0.0",
     "eslint-config-airbnb": "^16.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-typescript": "1.0.2",

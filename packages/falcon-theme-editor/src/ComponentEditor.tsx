@@ -90,9 +90,8 @@ export const ComponentEditor: React.SFC<{
                 </Dropdown>
               </GridLayout>
             );
-          } else {
-            return null;
           }
+          return null;
         })}
     </Box>
   );

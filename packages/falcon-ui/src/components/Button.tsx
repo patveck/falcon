@@ -45,8 +45,6 @@ export const Button = themed({
         secondary: {
           bg: 'primary',
           color: 'primaryText',
-          border: 'regular',
-          borderColor: 'secondary',
 
           css: ({ theme }) => ({
             ':hover': {

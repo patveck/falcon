@@ -28,7 +28,7 @@ export const ThemeSidebar = (props: ThemeSidebarProps) => (
       height={90}
       width={40}
       display="flex"
-      bg={props.open ? 'primaryLight' : 'primaryDark'}
+      bg={props.open ? 'white' : 'primaryDark'}
       p="sm"
       alignItems="center"
       css={{

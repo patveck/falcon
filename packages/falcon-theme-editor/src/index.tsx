@@ -1,4 +1,6 @@
 import React from 'react';
+import { diff } from 'deep-object-diff';
+import stringifyObject from 'stringify-object';
 
 import {
   H4,
@@ -18,7 +20,6 @@ import {
   DropdownLabel,
   DropdownMenu,
   DropdownMenuItem,
-  H2,
   Divider,
   DefaultThemeProps,
   H3,
@@ -148,16 +149,26 @@ const editorTheme = createTheme({
   icons: {
     locator: {
       icon: (props: any) => (
-        <svg viewBox="0 0 100 125" {...props}>
-          <polygon points="72.5,52.5 72.5,47.5 52.5,47.5 52.5,27.5 47.5,27.5 47.5,47.5 27.5,47.5 27.5,52.5 47.5,52.5 47.5,72.5 52.5,72.5    52.5,52.5  " />
-          <polygon points="90,90 65,90 65,95 90,95 95,95 95,90 95,65 90,65  " />
-          <polygon points="90,5 65,5 65,10 90,10 90,35 95,35 95,10 95,5  " />
-          <polygon points="10,10 35,10 35,5 10,5 5,5 5,10 5,35 10,35  " />
-          <polygon points="10,65 5,65 5,90 5,95 10,95 35,95 35,90 10,90  " />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
         </svg>
       ),
       css: {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        fill: 'none'
+      }
+    },
+    download: {
+      icon: (props: any) => (
+        <svg viewBox="0 0 24 24" {...props}>
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" x2="12" y1="15" y2="3" />
+        </svg>
+      ),
+      css: {
+        cursor: 'pointer',
+        fill: 'none'
       }
     }
   } as any
@@ -170,6 +181,20 @@ export class ThemeEditor extends React.Component<any, any> {
     selectedTheme: 0,
     componentLocator: false,
     activeComponent: undefined
+  };
+
+  downloadThemeCustomizations = () => {
+    const themeCustomizations = diff(this.props.initialTheme, this.props.theme);
+    const importString = "import { createTheme } from '@deity/falcon-ui';";
+    const data = `data:text/json;charset=utf-8,${encodeURIComponent(
+      `${importString}\n\nexport const theme = createTheme(${stringifyObject(themeCustomizations, { indent: '  ' })});`
+    )}`;
+
+    const downloader = document.createElement('a');
+
+    downloader.setAttribute('href', data);
+    downloader.setAttribute('download', 'theme.js');
+    downloader.click();
   };
 
   onChange = (themeKey: string, propName: string, isNumber?: boolean) => (e: any) => {
@@ -424,17 +449,18 @@ export class ThemeEditor extends React.Component<any, any> {
             gridAutoRows="min-content"
             css={{ overflow: 'auto' }}
           >
-            <H2 my="xs" css={{ textAlign: 'center' }}>
-              Theme Editor
-            </H2>
-            <Divider mb="md" />
-            <FlexLayout>
-              <Box title="Select themed component to inspect it's theme">
+            <FlexLayout justifyContent="space-around">
+              <Box css={{ textAlign: 'center' }} title="Select themed component to inspect it's theme">
                 <Icon
                   src="locator"
                   onClick={this.toggleComponentLocator}
-                  fill={this.state.componentLocator ? 'secondary' : 'black'}
+                  stroke={this.state.componentLocator ? 'secondary' : 'black'}
                 />
+                <Text fontSize="xs">Component Locator</Text>
+              </Box>
+              <Box css={{ textAlign: 'center' }} title="Download theme customizations">
+                <Icon src="download" stroke="black" onClick={this.downloadThemeCustomizations} />
+                <Text fontSize="xs">Download Customizations</Text>
               </Box>
             </FlexLayout>
             <Divider mb="md" />

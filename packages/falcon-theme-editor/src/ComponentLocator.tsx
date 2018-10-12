@@ -65,18 +65,18 @@ function getNearestThemableComponentForElement(el: Element) {
 
 // based on https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
 function getHashCode(val: string) {
-  var hash = 0;
+  let hash = 0;
   if (val.length == 0) return hash;
-  for (var i = 0; i < val.length; i++) {
+  for (let i = 0; i < val.length; i++) {
     hash = val.charCodeAt(i) + ((hash << 5) - hash);
-    hash = hash & hash;
+    hash &= hash;
   }
   return hash;
 }
 
 function getHSLA(hash: number) {
-  var shortened = hash % 360;
-  return 'hsla(' + shortened + ', 90%, 30%, 0.2)';
+  const shortened = hash % 360;
+  return `hsla(${shortened}, 90%, 30%, 0.2)`;
 }
 
 export class ComponentLocator extends React.Component<ComponentLocatorProps, ComponentLocatorState> {
@@ -101,7 +101,7 @@ export class ComponentLocator extends React.Component<ComponentLocatorProps, Com
   }
 
   onChange(e: MouseEvent) {
-    let elementFromPoint = document.elementFromPoint(e.clientX, e.clientY);
+    const elementFromPoint = document.elementFromPoint(e.clientX, e.clientY);
     if (!elementFromPoint) return;
     if (this.currentElementFromPoint === elementFromPoint) return;
 

@@ -1,15 +1,11 @@
 import React, { ReactNode } from 'react';
-import { Sidebar, Box, Portal, themed } from '@deity/falcon-ui';
+import { Sidebar, Box, Portal, Icon } from '@deity/falcon-ui';
 
 type ThemeSidebarProps = {
   open: boolean;
   toggle: any;
   children?: ReactNode;
 };
-
-const SVGIcon = themed({
-  tag: 'svg'
-});
 
 export const ThemeSidebar = (props: ThemeSidebarProps) => (
   <Sidebar
@@ -24,12 +20,12 @@ export const ThemeSidebar = (props: ThemeSidebarProps) => (
     <Box
       position="absolute"
       right="100%"
-      top="calc(50% - 40px)"
+      top="calc(50% - 35px)"
       height={90}
-      width={40}
+      width={35}
       display="flex"
-      bg={props.open ? 'white' : 'primaryDark'}
-      p="sm"
+      bg="white"
+      px="xs"
       alignItems="center"
       css={{
         cursor: 'pointer',
@@ -39,16 +35,7 @@ export const ThemeSidebar = (props: ThemeSidebarProps) => (
       }}
       onClick={props.toggle}
     >
-      <SVGIcon
-        viewBox="0 0 8 8"
-        height={20}
-        width={20}
-        css={({ theme }) => ({
-          fill: theme.colors.secondary
-        })}
-      >
-        <path d="M6 0l-1 1 2 2 1-1-2-2zm-2 2l-4 4v2h2l4-4-2-2z" />
-      </SVGIcon>
+      <Icon src="editor" size={35} />
     </Box>
   </Sidebar>
 );

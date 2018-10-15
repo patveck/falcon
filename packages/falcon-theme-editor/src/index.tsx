@@ -170,6 +170,25 @@ const editorTheme = createTheme({
         cursor: 'pointer',
         fill: 'none'
       }
+    },
+    editor: {
+      icon: (props: any) => (
+        <svg viewBox="0 0 56 56" {...props}>
+          <path
+            d="M8,41.08V2c0-0.553-0.448-1-1-1S6,1.447,6,2v39.08C2.613,41.568,0,44.481,0,48c0,3.859,3.14,7,7,7s7-3.141,7-7
+		C14,44.481,11.387,41.568,8,41.08z"
+          />
+          <path
+            d="M29,20.695V2c0-0.553-0.448-1-1-1s-1,0.447-1,1v18.632c-3.602,0.396-6.414,3.456-6.414,7.161s2.812,6.765,6.414,7.161V54
+		c0,0.553,0.448,1,1,1s1-0.447,1-1V34.891c3.4-0.577,6-3.536,6-7.098S32.4,21.272,29,20.695z"
+          />
+          <path
+            d="M56,8c0-3.859-3.14-7-7-7s-7,3.141-7,7c0,3.519,2.613,6.432,6,6.92V54c0,0.553,0.448,1,1,1s1-0.447,1-1V14.92
+		C53.387,14.432,56,11.519,56,8z"
+          />
+        </svg>
+      ),
+      fill: 'secondary'
     }
   } as any
 });
@@ -179,8 +198,7 @@ export class ThemeEditor extends React.Component<any, any> {
     openPanels: {},
     sidebarVisible: false,
     selectedTheme: 0,
-    componentLocator: false,
-    activeComponent: undefined
+    componentLocator: false
   };
 
   downloadThemeCustomizations = () => {
@@ -267,8 +285,8 @@ export class ThemeEditor extends React.Component<any, any> {
   };
 
   onComponentClick = (component: any) => {
+    this.props.setActiveComponent(component);
     this.setState({
-      activeComponent: component,
       componentLocator: false
     });
   };
@@ -284,10 +302,6 @@ export class ThemeEditor extends React.Component<any, any> {
       }
     });
   }
-
-  toggleSidebar = () => {
-    this.setState((state: any) => ({ sidebarVisible: !state.sidebarVisible }));
-  };
 
   toggleCollapsible = (key: string) => (e: any) => {
     e.preventDefault();
@@ -390,7 +404,7 @@ export class ThemeEditor extends React.Component<any, any> {
   }
 
   renderActiveComponentEditor() {
-    const activeComponent = this.state.activeComponent as
+    const activeComponent = this.props.activeComponent as
       | {
           defaultTheme: DefaultThemeProps;
         }
@@ -417,7 +431,7 @@ export class ThemeEditor extends React.Component<any, any> {
         {activeComponent.defaultTheme[themeKey].variants && (
           <Box>
             {Object.keys((activeComponent.defaultTheme[themeKey] as any).variants).map(variantKey => (
-              <React.Fragment>
+              <React.Fragment key={variantKey}>
                 <H3 css={{ textAlign: 'center' }} fontSize="md" my="md">
                   {variantKey} variant
                 </H3>
@@ -442,9 +456,9 @@ export class ThemeEditor extends React.Component<any, any> {
   render() {
     return (
       <ThemeProvider theme={editorTheme} withoutRoot>
-        <ThemeSidebar open={this.state.sidebarVisible} toggle={this.toggleSidebar}>
+        <ThemeSidebar open={this.props.openEditor} toggle={this.props.toggleEditor}>
           <GridLayout
-            p="sm"
+            p="md"
             gridTemplateColumns="minmax(280px, 380px)"
             gridAutoRows="min-content"
             css={{ overflow: 'auto' }}

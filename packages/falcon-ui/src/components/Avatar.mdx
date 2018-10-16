@@ -10,14 +10,14 @@ import { Avatar } from '../';
 <ThemePreview of={Avatar} />
 
 
+`Avatar` component renders as an `<img>` and accepts all of the `<img>` props, it's size can be easily adjusted via theme-based `size` prop,
+ but it also accepts other [responsive, theme-based style props](/responsive-props).
 
 ```javascript
 import { Avatar } from '@deity/falcon-ui';
 ```
-<Playground>
-  <Avatar src="http://i.pravatar.cc/150?img=69" mr="lg" />
 
+<Playground>
+  <Avatar src="http://i.pravatar.cc/150?img=69" mr="lg"/>
   <Avatar src="http://i.pravatar.cc/150?img=10" size="xxxl" title="Happy face" alt="Mrs Smith" />
 </Playground>
-
-`Avatar` size can be easily adjusted via theme-based `size` prop, but it also accepts any other [responsive, theme-based style prop](/responsive-props).

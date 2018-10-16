@@ -4,12 +4,19 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
-import { Box } from '../';
+import { Box, H2 } from '../';
 
-# Box
 
-### Basic usage
+<H2 my="lg" children="Box" />
+
+`Box` is a simple, generic component that by default renders as `div`.
+It doesn't ship with default theme, but yet still accepts accepts all of the [responsive, theme-based style props](/responsive-props).
+It's very flexible and can be used to quickly prototype new components or create one off components with custom needs.
 
 <Playground>
-  <Box>Generic box component</Box>
+  <Box display="grid" gridGap="md">
+    <Box fontSize="lg">Generic box component</Box>
+    <Box bg="primaryLight" color="primaryText" p="xxxl">With background & large padding</Box>
+    <Box as="img" size="xxl" src="https://user-images.githubusercontent.com/1118933/46464650-2f40df00-c7c7-11e8-827c-576ce330cb06.png" />
+  </Box>
 </Playground>
